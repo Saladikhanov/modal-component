@@ -1,19 +1,33 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
+import React, { Component, FunctionComponent, useState } from "react";
+import { render } from "react-dom";
+import { Modal } from "./modal/modal";
+import { ConfirmationModal } from "./confirmation-modal/confirmation-modal";
+import { useModal } from "./useModal";
 
-const root = ReactDOM.createRoot(
-  document.getElementById('root') as HTMLElement
-);
-root.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
-);
+const App: FunctionComponent = () => {
+  const { isShown, toggle } = useModal();
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
+  const onConfirm = () => toggle();
+  const onCancel = () => toggle();
+
+  return (
+    <React.Fragment>
+      <button onClick={toggle}>Open modal</button>
+
+      <Modal
+        isShown={isShown}
+        hide={toggle}
+        headerText="Header Text"
+        modalContent={
+          <ConfirmationModal
+            onConfirm={onConfirm}
+            onCancel={onCancel}
+            message="Content Message"
+          />
+        }
+      />
+    </React.Fragment>
+  );
+};
+
+render(<App />, document.getElementById("root"));
